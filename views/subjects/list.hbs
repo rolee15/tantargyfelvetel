@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <title>Tárgyak</title>
+    </head>
+    <body>
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            Tantárgy sikeresen hozzáadva
+        </div>
+        <div class="page-header">
+            <h1>Hozzáadott tárgyaim</h1>
+        </div>
+        <table class="table table-striped table-hover ">
+            <thead>
+                <tr>
+                    <th>Időpont</th>
+                    <th>Státusz</th>
+                    <th>Helyszín</th>
+                    <th>Leírás</th>
+                </tr>   
+            </thead>
+            <tbody>
+                {{#each subjects}}
+                <tr>
+                    <td>{{date}}</td>
+                    <td><span class="label label-{{statusClass}}">{{statusText}}</span></td>
+                    <td>{{location}}</td>
+                    <td><span class="badge">{{numberOfMessages}}</span> {{description}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <p><a href="/subjects/new" class="btn btn-default">Új tárgy felvitele</a></p>
+    </body>
+</html>
