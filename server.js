@@ -14,25 +14,11 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 
-
-// Endpoint
-app.get('/', function (req, res){
-  console.log('keres');
-})
-
-// Teszt endpoint
-app.get('/test', function (req, res){
-  res.render('test', {
-    cim: 'Ez egy cííím',
-    alcim: 'Ez egy alcim'
-  });
-})
-
-// Teszt endpoint
-app.get('/errors/list', function (req, res){
-  res.render('errors/list',
+// List subjects
+app.get('/subjects/list', function (req, res){
+  res.render('subjects/list',
   {
-        errors: [
+        subjects: [
             {
                 date: '2015.09.16.',
                 statusClass: 'danger',
@@ -55,13 +41,13 @@ app.get('/errors/list', function (req, res){
   );
 })
 
-
-app.get('/errors/new', function (req, res) {
-    res.render('errors/new');
+// New subject
+app.get('/subjects/new', function (req, res) {
+    res.render('subjects/new');
 });
 
 
-app.post('/errors/new', function (req, res) {
+app.post('/subjects/new', function (req, res) {
   
    console.log(req.body);
    
@@ -76,12 +62,12 @@ app.post('/errors/new', function (req, res) {
     if (validationErrors) {
         // űrlap megjelenítése a hibákkal és a felküldött adatokkal
         console.log(validationErrors);
-        res.redirect('errors/new');
+        res.redirect('subjects/new');
     }
     else {
         // adatok elmentése (ld. később) és a hibalista megjelenítése
         console.log("mentes");
-        res.redirect('errors/list');
+        res.redirect('subjects/list');
     }
 });
 
