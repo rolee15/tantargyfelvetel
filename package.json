@@ -8,7 +8,9 @@
   "dependencies": {
     "async": "~0.2.8",
     "body-parser": "^1.14.1",
+    "connect-flash": "^0.1.1",
     "express": "^3.2.6",
+    "express-session": "^1.12.1",
     "express-validator": "^2.18.0",
     "hbs": "^4.0.0",
     "socket.io": "~0.9.14"
