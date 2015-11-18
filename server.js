@@ -7,6 +7,7 @@ var flash = require('connect-flash');
 var Waterline = require('waterline');
 var memoryAdapter = require('sails-memory');
 var diskAdapter = require('sails-disk');
+var postgresqlAdapter = require('sails-postgresql');
 
 var app = express();
 var orm = new Waterline();
@@ -28,20 +29,12 @@ app.use(session({
     saveUninitialized: false,
 }));
 
-
-app.get('/', function (req, res) {
-    // Olvasás
-    //req.session.parameter
-    // Írás
-    //req.session.parameter = value;
-});
-
 //Model layer
-var subjectContainer = [];
 
+// Subject model
 var subjectCollection = Waterline.Collection.extend({
     identity: 'subject',
-    connection: 'default',
+    connection: 'postgresql',
     attributes: {
         date: {
             type: 'datetime',
@@ -61,7 +54,7 @@ var subjectCollection = Waterline.Collection.extend({
             type: 'string',
             required: true,
         },
-    }
+    },
 });
 
 orm.loadCollection(subjectCollection);
@@ -92,9 +85,11 @@ function decorateErrors(subjectContainer) {
 
 // List subjects
 app.get('/subjects/list', function (req, res){
-  res.render('subjects/list', {
-        subjects: decorateErrors(subjectContainer),
-        messages: req.flash('info')
+    app.models.subject.find().then(function (subjects) {
+        res.render('subjects/list', {
+            subjects: decorateErrors(subjects),
+            messages: req.flash('info')
+        });
     });
 })
 
@@ -126,17 +121,21 @@ app.post('/subjects/new', function (req, res) {
         res.redirect('subjects/new');
     }
     else {
-        // adatok elmentése (ld. később) és a hibalista megjelenítése
-        // POST /errors/new végpont
-        subjectContainer.push({
-            date: (new Date()).toLocaleString(),
+        // adatok elmentése és a hibalista megjelenítése
+        // POST /subjects/new végpont
+        app.models.subject.create({
             status: 'new',
             location: req.body.helyszin,
-            description: req.body.leiras,
-            numberOfMessages: 0
+            description: req.body.leiras
+        })
+        .then(function (subject) {
+            req.flash('info', 'Hibajegy sikeresen felvéve!');
+            res.redirect('/subjects/list');
+        })
+        .catch(function (err) {
+            //hiba
+            console.log(err);
         });
-        req.flash('info', 'Hiba sikeresen felvéve!');
-        res.redirect('subjects/list');
     }
 });
 
@@ -145,6 +144,7 @@ var config = {
     adapters: {
         memory:     memoryAdapter,
         disk:       diskAdapter,
+        postgresql: postgresqlAdapter
     },
     connections: {
         default: {
@@ -156,6 +156,13 @@ var config = {
         disk: {
             adapter: 'disk'
         },
+        postgresql: {
+            adapter: 'postgresql',
+            database: 'subjects',
+            host: 'localhost',
+            user: 'ubuntu',
+            password: 'ubuntu',
+        }
     },
     defaults: {
         migrate: 'alter'
