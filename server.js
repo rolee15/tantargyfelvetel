@@ -4,8 +4,12 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var session = require('express-session');
 var flash = require('connect-flash');
+var Waterline = require('waterline');
+var memoryAdapter = require('sails-memory');
+var diskAdapter = require('sails-disk');
 
 var app = express();
+var orm = new Waterline();
 
 // View beállítás HBS-hez
 app.set('views', './views');
@@ -24,6 +28,7 @@ app.use(session({
     saveUninitialized: false,
 }));
 
+
 app.get('/', function (req, res) {
     // Olvasás
     //req.session.parameter
@@ -33,6 +38,33 @@ app.get('/', function (req, res) {
 
 //Model layer
 var subjectContainer = [];
+
+var subjectCollection = Waterline.Collection.extend({
+    identity: 'subject',
+    connection: 'default',
+    attributes: {
+        date: {
+            type: 'datetime',
+            defaultsTo: function () { return new Date(); },
+            required: true,
+        },
+        status: {
+            type: 'string',
+            enum: ['new', 'assigned', 'success', 'rejected', 'pending'],
+            required: true,
+        },
+        location: {
+            type: 'string',
+            required: true,
+        },
+        description: {
+            type: 'string',
+            required: true,
+        },
+    }
+});
+
+orm.loadCollection(subjectCollection);
 
 //Viewmodel réteg
 var statusTexts = {
@@ -108,12 +140,42 @@ app.post('/subjects/new', function (req, res) {
     }
 });
 
+// ORM indítása
+var config = {
+    adapters: {
+        memory:     memoryAdapter,
+        disk:       diskAdapter,
+    },
+    connections: {
+        default: {
+            adapter: 'disk',
+        },
+        memory: {
+            adapter: 'memory'
+        },
+        disk: {
+            adapter: 'disk'
+        },
+    },
+    defaults: {
+        migrate: 'alter'
+    },
+};
 
-// Listen
-var port = process.env.PORT;
-var host = process.env.IP;
-var server = app.listen(port, host, function(){});
 
-
+orm.initialize(config, function(err, models) {
+    if(err) throw err;
+    
+    app.models = models.collections;
+    app.connections = models.connections;
+    
+    // Start Server
+    var port = process.env.PORT || 3000;
+    app.listen(port, function () {
+        console.log('Server is started.');
+    });
+    
+    console.log("ORM is started.");
+});
 
 
