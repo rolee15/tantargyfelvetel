@@ -20,5 +20,8 @@ module.exports = {
             type: 'string',
             required: true,
         },
+        user: {
+            model: 'user',
+        },
     },
 };
