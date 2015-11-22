@@ -130,8 +130,8 @@ app.use('/', indexRouter);
 app.use('/subjects', ensureAuthenticated, subjectRouter);
 app.use('/login', loginRouter);
 
-app.get('/operator', ensureAuthenticated, andRestrictTo('operator'), function(req, res) {
-    res.end('operator');
+app.get('/teacher', ensureAuthenticated, andRestrictTo('teacher'), function(req, res) {
+    res.end('teacher');
 });
 app.get('/logout', function(req, res){
     req.logout();

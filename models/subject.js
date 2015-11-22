@@ -1,6 +1,6 @@
 module.exports = {
     identity: 'subject',
-    connection: 'postgresql',
+    connection: 'memory',
     attributes: {
         date: {
             type: 'datetime',

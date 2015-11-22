@@ -2,7 +2,7 @@ var bcrypt = require('bcryptjs');
 
 module.exports = {
     identity: 'user',
-    connection: 'default',
+    connection: 'memory',
     attributes: {
         neptun: {
             type: 'string',
@@ -21,15 +21,11 @@ module.exports = {
             type: 'string',
             required: true,
         },
-        avatar: {
-            type: 'string',
-            url: true,
-        },
         role: {
             type: 'string',
-            enum: ['teacher', 'student'],
+            enum: ['student', 'teacher'],
             required: true,
-            defaultsTo: 'teacher'
+            defaultsTo: 'student'
         },
         
         subjects: {
