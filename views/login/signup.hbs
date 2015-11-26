@@ -10,54 +10,46 @@
 </div>
 
 <form class="form-horizontal" method="post">
-    <fieldset>
+
         <div class="form-group">
-            <label for="surname" class="col-lg-2 control-label">Vezetéknév</label>
-            <div class="col-lg-10">
+            <label for="surname" class="col-md-1 control-label">Vezetéknév</label>
+            <div class="col-md-6">
                 <input class="form-control" type="text" id="surname" name="surname">
             </div>
         </div>
         <div class="form-group">
-            <label for="forename" class="col-lg-2 control-label">Keresztnév</label>
-            <div class="col-lg-10">
+            <label for="forename" class="col-md-1 control-label">Keresztnév</label>
+            <div class="col-md-6">
                 <input class="form-control" type="text" id="forename" name="forename">
             </div>
         </div>
         <div class="form-group">
-            <label for="neptun" class="col-lg-2 control-label">Neptun-kód</label>
-            <div class="col-lg-10">
+            <label for="neptun" class="col-md-1 control-label">Neptun-kód</label>
+            <div class="col-md-6">
                 <input class="form-control" type="text" id="neptun" name="neptun">
             </div>
         </div>
         <div class="form-group">
-            <label for="password" class="col-lg-2 control-label">Jelszó</label>
-            <div class="col-lg-10">
+            <label for="password" class="col-md-1 control-label">Jelszó</label>
+            <div class="col-md-6">
                 <input class="form-control" type="password" id="password" name="password">
             </div>
         </div>
         <div class="form-group">
-            <label for="role" class="col-lg-2 control-label">Szerep</label>
-            <div class="col-lg-10">
-                <div class="radio">
-                  <label>
-                    <input type="radio" id="role" name="role" value="student" checked>
-                    Diák
-                  </label>
-                </div>
-                <div class="radio">
-                  <label>
-                    <input type="radio" id="role" name="role" value="teacher">
-                    Tanár
-                  </label>
-                </div>
+            <label for="role" class="col-md-1 control-label">Szerep</label>
+            <div class="col-md-6">
+                <select class="form-control" id="role" name="role">
+                    <option value="student">Diák</option>
+                    <option value="teacher">Tanár</option>
+                  </select>
             </div>
         </div>
         
         <div class="form-group">
-            <div class="col-lg-10 col-lg-offset-2">
+            <div class="col-md-6 col-md-offset-1">
                 <button type="reset" class="btn btn-default">Cancel</button>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
-    </fieldset>
+
 </form>

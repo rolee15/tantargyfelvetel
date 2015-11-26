@@ -36,14 +36,14 @@ module.exports = {
         validPassword: function (password) {
             return bcrypt.compareSync(password, this.password);
         },
-        beforeCreate: function(values, next) {
-            bcrypt.hash(values.password, 10, function(err, hash) {
-                if (err) {
-                    return next(err);
-                }
-                values.password = hash;
-                next();
-            });
-        }
     },
+    beforeCreate: function(values, next) {
+        bcrypt.hash(values.password, 10, function(err, hash) {
+            if (err) {
+                return next(err);
+            }
+            values.password = hash;
+            next();
+        });
+    }
 };
