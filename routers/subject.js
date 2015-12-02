@@ -28,9 +28,27 @@ function decorateErrors(subjectContainer) {
 }
 
 router.get('/list', function (req, res) {
-    req.app.models.subject.find().then(function (subjects) {
+    req.app.models.registeredsubject.find().then(function (subjects) {
         res.render('subjects/list', {
-            subjects: decorateErrors(subjects),
+            subjects: subjects,
+            messages: req.flash('info')
+        });
+    });
+});
+
+router.get('/list/:id', function (req, res) {
+    req.app.models.registeredsubject.findOne({id: req.params.id}).then(function (subject) {
+        res.render('subjects/subject', {
+            subject: subject,
+            messages: req.flash('info')
+        });
+    });
+});
+
+router.get('/register', function (req, res) {
+    req.app.models.registeredsubject.find().then(function (subjects) {
+        res.render('subjects/register', {
+            subjects: subjects,
             messages: req.flash('info')
         });
     });
@@ -69,7 +87,7 @@ router.post('/new', function (req, res) {
             description: req.body.leiras
         })
         .then(function (subject) {
-            req.flash('info', 'Hibajegy sikeresen felvéve!');
+            req.flash('info', 'Tantárgy sikeresen felvéve!');
             res.redirect('/subjects/list');
         })
         .catch(function (err) {

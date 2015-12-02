@@ -1,5 +1,5 @@
 module.exports = {
-    identity: 'subject',
+    identity: 'registeredsubject',
     connection: 'memory',
     attributes: {
         code: {
@@ -23,9 +23,8 @@ module.exports = {
             type: 'string',
             required: true,
         },
-        teacher: {
-            type: 'string',
-            required: true,
+        user: {
+            model: 'user',
         },
     },
 };

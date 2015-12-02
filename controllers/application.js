@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var session = require('express-session');
 var flash = require('connect-flash');
+var sails = require('sails');
 
 var indexRouter = require('../routers/index');
 var loginRouter = require('../routers/login');

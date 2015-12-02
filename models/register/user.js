@@ -28,8 +28,8 @@ module.exports = {
             defaultsTo: 'student'
         },
         
-        subjects: {
-            collection: 'subject',
+        registeredsubjects: {
+            collection: 'registeredsubject',
             via: 'user'
         },
         
