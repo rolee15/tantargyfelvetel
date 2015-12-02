@@ -5,29 +5,80 @@
     <form class="form-horizontal" method="post">
         <fieldset>
             <div class="form-group
-                {{#if validationErrors.helyszin}}
+                {{#if validationErrors.code}}
                     has-error
                 {{/if}}
             ">
-                <label for="helyszin" class="col-lg-2 control-label">Helyszín</label>
+                <label for="code" class="col-lg-2 control-label">Kurzuskód</label>
                 <div class="col-lg-10">
-                    <input class="form-control" id="helyszin" name="helyszin" placeholder="pl. PC6, Lovarda, 2. emeleti folyosó..." type="text" value="{{data.helyszin}}">
+                    <input class="form-control" id="code" name="code" type="text" value="{{data.code}}">
+                    {{#if validationErrors.code}}
+                        <span class="help-block">{{validationErrors.code.msg}}</span>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="form-group
+                {{#if validationErrors.name}}
+                    has-error
+                {{/if}}
+            ">
+                <label for="name" class="col-lg-2 control-label">Név</label>
+                <div class="col-lg-10">
+                    <input class="form-control" id="name" name="name" type="text" value="{{data.name}}">
+                    {{#if validationErrors.name}}
+                        <span class="help-block">{{validationErrors.name.msg}}</span>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="form-group
+                {{#if validationErrors.type}}
+                    has-error
+                {{/if}}
+            ">
+                <label for="type" class="col-lg-2 control-label">Típus</label>
+                <div class="col-lg-10">
+                    <input class="form-control" id="type" name="type" type="text" placeholder="Előadás vagy Gyakorlat" value="{{data.type}}">
+                    {{#if validationErrors.type}}
+                        <span class="help-block">{{validationErrors.type.msg}}</span>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="form-group
+                {{#if validationErrors.date}}
+                    has-error
+                {{/if}}
+            ">
+                <label for="date" class="col-lg-2 control-label">Időpont</label>
+                <div class="col-lg-10">
+                    <input class="form-control" id="date" name="date" type="text" value="{{data.date}}">
+                    {{#if validationErrors.date}}
+                        <span class="help-block">{{validationErrors.date.msg}}</span>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="form-group
+                {{#if validationErrors.location}}
+                    has-error
+                {{/if}}
+            ">
+                <label for="location" class="col-lg-2 control-label">Helyszín</label>
+                <div class="col-lg-10">
+                    <input class="form-control" id="location" name="location" placeholder="pl. PC6, Lovarda, 2. emeleti folyosó..." type="text" value="{{data.location}}">
                     {{#if validationErrors.helyszin}}
                         <span class="help-block">{{validationErrors.helyszin.msg}}</span>
                     {{/if}}
                 </div>
             </div>
             <div class="form-group
-                {{#if validationErrors.leiras}}
+                {{#if validationErrors.teacher}}
                     has-error
                 {{/if}}
             ">
-                <label for="leiras" class="col-lg-2 control-label">Leírás</label>
+                <label for="teacher" class="col-lg-2 control-label">Tanár</label>
                 <div class="col-lg-10">
-                    <textarea class="form-control" rows="3" id="leiras" name="leiras">{{data.leiras}}</textarea>
-                    <span class="help-block">Meg kell adni a helyszínt, ha pedig konkrét géppel van probléma, akkor azt is.</span>
-                    {{#if validationErrors.leiras}}
-                        <span class="help-block">{{validationErrors.leiras.msg}}</span>
+                    <input class="form-control" id="teacher" name="teacher" type="text" value="{{data.teacher}}">
+                    {{#if validationErrors.teacher}}
+                        <span class="help-block">{{validationErrors.teacher.msg}}</span>
                     {{/if}}
                 </div>
             </div>

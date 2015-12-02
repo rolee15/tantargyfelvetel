@@ -46,7 +46,7 @@ router.get('/list/:id', function (req, res) {
 });
 
 router.get('/register', function (req, res) {
-    req.app.models.registeredsubject.find().then(function (subjects) {
+    req.app.models.subject.find().then(function (subjects) {
         res.render('subjects/register', {
             subjects: subjects,
             messages: req.flash('info')
@@ -66,9 +66,12 @@ router.get('/new',  function (req, res) {
 
 router.post('/new', function (req, res) {
     // adatok ellenőrzése
-    req.checkBody('helyszin', 'Hibás helyszín').notEmpty().withMessage('Kötelező megadni!');
-    req.sanitizeBody('leiras').escape();
-    req.checkBody('leiras', 'Hibás leírás').notEmpty().withMessage('Kötelező megadni!');
+    req.checkBody('code', 'Hibás kurzuskód').notEmpty().withMessage('Kötelező megadni!');
+    req.checkBody('name', 'Hibás név').notEmpty().withMessage('Kötelező megadni!');
+    req.checkBody('type', 'Hibás típus').notEmpty().withMessage('Kötelező megadni!');
+    req.checkBody('date', 'Hibás időpont').notEmpty().withMessage('Kötelező megadni!');
+    req.checkBody('location', 'Hibás helyszín').notEmpty().withMessage('Kötelező megadni!');
+    req.checkBody('teacher', 'Hibás tanár').notEmpty().withMessage('Kötelező megadni!');
     
     var validationErrors = req.validationErrors(true);
     
@@ -82,13 +85,16 @@ router.post('/new', function (req, res) {
         // adatok elmentése és a hibalista megjelenítése
         // POST /subjects/new végpont
         req.app.models.subject.create({
-            status: 'new',
-            location: req.body.helyszin,
-            description: req.body.leiras
+            code: req.body.code,
+            name: req.body.name,
+            type: req.body.type,
+            date: req.body.date,
+            location: req.body.location,
+            teacher: req.body.teacher
         })
         .then(function (subject) {
             req.flash('info', 'Tantárgy sikeresen felvéve!');
-            res.redirect('/subjects/list');
+            res.redirect('/subjects/register');
         })
         .catch(function (err) {
             //hiba
