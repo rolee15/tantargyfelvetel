@@ -2,7 +2,7 @@ var bcrypt = require('bcryptjs');
 
 module.exports = {
     identity: 'user',
-    connection: 'memory',
+    connection: 'postgresql',
     attributes: {
         neptun: {
             type: 'string',

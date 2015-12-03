@@ -1,6 +1,6 @@
 module.exports = {
     identity: 'registeredsubject',
-    connection: 'memory',
+    connection: 'postgresql',
     attributes: {
         code: {
             type: 'string',
@@ -15,11 +15,19 @@ module.exports = {
             enum: ['Gyakorlat', 'Előadás'],
             required: true,
         },
+        credit: {
+            type: 'integer',
+            required: true,
+        },
         date: {
             type: 'string',
             required: true,
         },
         location: {
+            type: 'string',
+            required: true,
+        },
+        teacher: {
             type: 'string',
             required: true,
         },

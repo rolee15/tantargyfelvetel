@@ -3,7 +3,6 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var session = require('express-session');
 var flash = require('connect-flash');
-var sails = require('sails');
 
 var indexRouter = require('../routers/index');
 var loginRouter = require('../routers/login');
@@ -26,7 +25,7 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 app.use(session({
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 1200000 },
     secret: 'titkos szoveg',
     resave: false,
     saveUninitialized: false,

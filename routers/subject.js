@@ -2,58 +2,77 @@ var express = require('express');
 
 var router = express.Router();
 
-//Viewmodel réteg
-var statusTexts = {
-    'new': 'Új',
-    'assigned': 'Hozzárendelve',
-    'ready': 'Kész',
-    'rejected': 'Elutasítva',
-    'pending': 'Felfüggesztve',
-};
-
-var statusClasses = {
-    'new': 'danger',
-    'assigned': 'info',
-    'ready': 'success',
-    'rejected': 'default',
-    'pending': 'warning',
-};
-
-function decorateErrors(subjectContainer) {
-    return subjectContainer.map(function (e) {
-        e.statusText = statusTexts[e.status];
-        e.statusClass = statusClasses[e.status];
-        return e;
-    });
-}
-
-router.get('/list', function (req, res) {
+//Felvett tárgyak
+router.get('/register', function (req, res) {
     req.app.models.registeredsubject.find().then(function (subjects) {
-        res.render('subjects/list', {
+        res.render('subjects/register/list', {
             subjects: subjects,
             messages: req.flash('info')
         });
     });
 });
-
-router.get('/list/:id', function (req, res) {
+router.get('/register/:id', function (req, res) {
     req.app.models.registeredsubject.findOne({id: req.params.id}).then(function (subject) {
-        res.render('subjects/subject', {
+        res.render('subjects/register/subject', {
             subject: subject,
             messages: req.flash('info')
         });
     });
 });
 
-router.get('/register', function (req, res) {
+//Meghirdetett tárgyak
+router.get('/list', function (req, res) {
     req.app.models.subject.find().then(function (subjects) {
-        res.render('subjects/register', {
+        res.render('subjects/list', {
             subjects: subjects,
             messages: req.flash('info')
         });
     });
 });
+router.get('/list/:id', function (req, res) {
+    req.app.models.subject.findOne({id: req.params.id}).then(function (subject) {
+        req.app.models.group.find({subject: subject.id}).then(function (groups) {
+            res.render('subjects/subject', {
+                subject: subject,
+                groups: groups,
+                messages: req.flash('info')
+            });
+        });
+    });
+});
 
+//Tárgy felvétele
+router.get('/take/:id', function (req, res) {
+    req.app.models.group.findOne({id: req.params.id}).then(function (group) {
+        req.app.models.subject.findOne({id: group.subject}).then(function (subject) {
+            req.app.models.registeredsubject.findOrCreate({code: subject.code}, {
+                code: subject.code,
+                name: subject.name,
+                type: subject.type,
+                credit: subject.credit,
+                date: group.date,
+                location: group.location,
+                teacher: group.teacher,
+            })
+            .then(function (subject) {
+                res.redirect('/subjects/register');
+            })
+            .catch(function (err) {
+                //hiba
+                console.log(err);
+            });
+        });
+    });
+});
+
+//Tárgy leadása
+router.get('/delete/:id', function (req, res) {
+    req.app.models.registeredsubject.destroy({id: req.params.id}).then(function (subject) {
+        res.redirect('/subjects/register');
+    });
+});
+
+//Új tárgy
 router.get('/new',  function (req, res) {
     var validationErrors = (req.flash('validationErrors') || [{}]).pop();
     var data = (req.flash('data') || [{}]).pop();
@@ -69,6 +88,7 @@ router.post('/new', function (req, res) {
     req.checkBody('code', 'Hibás kurzuskód').notEmpty().withMessage('Kötelező megadni!');
     req.checkBody('name', 'Hibás név').notEmpty().withMessage('Kötelező megadni!');
     req.checkBody('type', 'Hibás típus').notEmpty().withMessage('Kötelező megadni!');
+    req.checkBody('credit', 'Hibás kredit').notEmpty().withMessage('Kötelező megadni!');
     req.checkBody('date', 'Hibás időpont').notEmpty().withMessage('Kötelező megadni!');
     req.checkBody('location', 'Hibás helyszín').notEmpty().withMessage('Kötelező megadni!');
     req.checkBody('teacher', 'Hibás tanár').notEmpty().withMessage('Kötelező megadni!');
@@ -79,22 +99,32 @@ router.post('/new', function (req, res) {
         // űrlap megjelenítése a hibákkal és a felküldött adatokkal
         req.flash('validationErrors', validationErrors);
         req.flash('data', req.body);
-        res.redirect('subjects/new');
+        res.redirect('new');
     }
     else {
         // adatok elmentése és a hibalista megjelenítése
         // POST /subjects/new végpont
-        req.app.models.subject.create({
+        req.app.models.subject.findOrCreate({code: req.body.code}, {
             code: req.body.code,
             name: req.body.name,
             type: req.body.type,
-            date: req.body.date,
-            location: req.body.location,
-            teacher: req.body.teacher
+            credit: req.body.credit
         })
         .then(function (subject) {
-            req.flash('info', 'Tantárgy sikeresen felvéve!');
-            res.redirect('/subjects/register');
+            req.app.models.group.create({
+                date: req.body.date,
+                location: req.body.location,
+                teacher: req.body.teacher,
+                subject: subject.id
+            })
+            .then(function () {
+                req.flash('info', 'Tantárgy sikeresen hozzáadva!');
+                res.redirect('list');
+            })
+            .catch(function (err) {
+                //hiba
+                console.log(err);
+            });
         })
         .catch(function (err) {
             //hiba

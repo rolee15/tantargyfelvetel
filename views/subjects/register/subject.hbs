@@ -21,27 +21,18 @@
             <td>Kredit</td>
             <td>{{subject.credit}}</td>
         </tr>
-    </tbody>
-</table>
-<table class="table table-striped table-hover ">
-    <thead>
         <tr>
-            <th>Időpont</th>
-            <th>Helyszín</th>
-            <th>Oktató</th>
-        </tr>   
-    </thead>
-    <tbody>
-        {{#each groups}}
-        <tr>
-            <td>{{date}}</td>
-            <td>{{location}}</td>
-            <td>{{teacher}}</td>
-            <td>
-                <a class="btn btn-default btn-sm megtekintes-gomb" href="/subjects/take/{{id}}" role="button">Felvétel</a>
-            </td>
+            <td>Időpont</td>
+            <td>{{subject.date}}</td>
         </tr>
-        {{/each}}
+        <tr>
+            <td>Helyszín</td>
+            <td>{{subject.location}}</td>
+        </tr>
+        <tr>
+            <td>Oktató</td>
+            <td>{{subject.teacher}}</td>
+        </tr>
     </tbody>
 </table>
 </body>
